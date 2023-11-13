@@ -12,4 +12,5 @@ def login():
                 print("Successfully logged in")
                 return {"username": entry["username"], "wallet": entry["wallet"] }
         print("Either username or password were incorrect")
+        #test
         return None

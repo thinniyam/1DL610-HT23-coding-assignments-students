@@ -1,4 +1,4 @@
-from products import *
+from products import display_csv_as_table
 import os, shutil, pytest
 
 @pytest.fixture(scope='module')

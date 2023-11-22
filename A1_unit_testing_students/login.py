@@ -78,17 +78,16 @@ def validate_password(password):
     :param password: the password
     :return: dictionary: the list of errors
     """
-    allowed_symbols = ['@', '$', '#', '&', '%']
     min_length = 8
     errors = {}
 
-    if len(password) >= min_length:
-        if not any(char.isupper() for char in password):
-            errors.update({'capital': 'The password must contain at least one capital letter.'})
-
-        if not any(not char.isalnum() for char in password):
-            errors.update({'symbol': 'The password must contain at least one special symbol.'})
-    else:
+    if len(password) < min_length:
         errors.update({'length': 'The password must be at least eight characters.'})
+
+    if not any(char.isupper() for char in password):
+        errors.update({'capital': 'The password must contain at least one capital letter.'})
+
+    if not any(not char.isalnum() for char in password):
+        errors.update({'symbol': 'The password must contain at least one special symbol.'})
 
     return errors

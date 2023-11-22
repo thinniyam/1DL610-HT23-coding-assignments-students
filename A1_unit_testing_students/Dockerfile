@@ -1,5 +1,10 @@
 # Base Image
 FROM python:latest
+
+LABEL maintainer="Nurul Amin Muhit <me@muhit.me>"
+LABEL description="Software Testing Assignment"
+LABEL version="1.0.0"
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -19,5 +24,4 @@ COPY . /usr/src
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80 443
 CMD ["python", "main.py"]

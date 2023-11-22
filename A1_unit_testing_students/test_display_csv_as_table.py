@@ -15,8 +15,8 @@ def test_int_input():
 def test_float_input():
     assert display_csv_as_table(0.5)
 
-def test_list_input():
-    assert display_csv_as_table(["products.csv", "products.csv"])
+def test_list_input(copy_csv_file):
+    assert display_csv_as_table(["copy_products.csv", "copy_products.csv"])
 
 # Test a non-existing file
 def test_EC1():

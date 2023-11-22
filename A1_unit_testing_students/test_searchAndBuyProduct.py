@@ -61,7 +61,6 @@ def test_with_stubs4(login_stub, checkoutAndPayment_stub, display_csv_as_table_s
 
     def input_side_effect(prompt):
         i[0] += 1
-        print(i)
         if i[0] == 3:
             raise SystemExit
         elif "Search for products" in prompt:

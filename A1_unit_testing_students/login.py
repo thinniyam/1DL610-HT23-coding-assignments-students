@@ -8,10 +8,15 @@ def login():
     with open('users.json', "r") as file:
         data = json.load(file)
         for entry in data:
-            if entry["username"] == username and entry["password"] == password:
-                print("Successfully logged in")
-                return {"username": entry["username"], "wallet": entry["wallet"]}
-        print("Either username or password were incorrect")
+            if entry["username"] == username:
+                if entry["password"] == password:
+                    print("Successfully logged in")
+                    return {"username": entry["username"], "wallet": entry["wallet"]}
+                else:
+                    print("Either username or password were incorrect")
+                    return None
+
+        print("Username does not exists.")
         register_request = input("Do you want to register? (Y/N): ").lower()
 
         if register_request.lower() == "y":

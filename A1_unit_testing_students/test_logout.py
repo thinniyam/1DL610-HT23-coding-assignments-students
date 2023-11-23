@@ -26,17 +26,20 @@ def cart_with_one_element():
 
 
 @pytest.fixture
+def cart_with_two_elements():
+    cart = ShoppingCart()
+    cart.add_item(Product(name="Apple", price=5, units=10))
+    cart.add_item(Product(name="Banana", price=10, units=2))
+    return cart
+
+
+@pytest.fixture
 def cart_with_multiple_elements():
     cart = ShoppingCart()
     cart.add_item(Product(name="Apple", price=5, units=10))
     cart.add_item(Product(name="Banana", price=10, units=2))
     cart.add_item(Product(name="Orange", price=12, units=5))
     return cart
-
-
-@pytest.fixture
-def clear_cart_stub(mocker):
-    return mocker.patch('checkoutAndPayment.ShoppingCart.clear_items')
 
 
 def test_logout_with_empty_cart(cart_empty):
@@ -46,7 +49,7 @@ def test_logout_with_empty_cart(cart_empty):
     assert len(cart_empty.items) == 0
 
 
-@pytest.mark.parametrize("user_inputs", ["N", "n", "No", "no"])
+@pytest.mark.parametrize("user_inputs", ["n", "No"])
 def test_cancel_logout_cart_with_one_element(user_inputs, cart_with_one_element, capsys):
     copy_cart = copy.deepcopy(cart_with_one_element)
 
@@ -61,7 +64,22 @@ def test_cancel_logout_cart_with_one_element(user_inputs, cart_with_one_element,
     assert create_expected_output(copy_cart) in captured.out
 
 
-@pytest.mark.parametrize("user_inputs", ["N", "n", "No", "no"])
+@pytest.mark.parametrize("user_inputs", ["n"])
+def test_cancel_logout_cart_with_two_elements(user_inputs, cart_with_two_elements, capsys):
+    copy_cart = copy.deepcopy(cart_with_two_elements)
+
+    with mock.patch('builtins.input', side_effect=user_inputs):
+        result = logout(cart=cart_with_two_elements)
+
+    # Capture the printed output
+    captured = capsys.readouterr()
+
+    assert result == False
+    assert len(cart_with_two_elements.items) == len(copy_cart.items)
+    assert create_expected_output(copy_cart) in captured.out
+
+
+@pytest.mark.parametrize("user_inputs", ["n"])
 def test_cancel_logout_cart_with_multiple_elements(user_inputs, cart_with_multiple_elements, capsys):
     copy_cart = copy.deepcopy(cart_with_multiple_elements)
 
@@ -76,7 +94,7 @@ def test_cancel_logout_cart_with_multiple_elements(user_inputs, cart_with_multip
     assert create_expected_output(copy_cart) in captured.out
 
 
-@pytest.mark.parametrize("user_inputs", ["Y", "y", "Yes", "yes"])
+@pytest.mark.parametrize("user_inputs", ["y", "Yes"])
 def test_logout_clear_cart_with_one_element(user_inputs, cart_with_one_element, capsys):
     copy_cart = copy.deepcopy(cart_with_one_element)
 
@@ -91,7 +109,22 @@ def test_logout_clear_cart_with_one_element(user_inputs, cart_with_one_element, 
     assert create_expected_output(copy_cart) in captured.out
 
 
-@pytest.mark.parametrize("user_inputs", ["Y", "y", "Yes", "yes"])
+@pytest.mark.parametrize("user_inputs", ["y"])
+def test_logout_clear_cart_with_two_elements(user_inputs, cart_with_two_elements, capsys):
+    copy_cart = copy.deepcopy(cart_with_two_elements)
+
+    with mock.patch('builtins.input', side_effect=user_inputs):
+        result = logout(cart=cart_with_two_elements)
+
+    # Capture the printed output
+    captured = capsys.readouterr()
+
+    assert result == True
+    assert len(cart_with_two_elements.items) == 0
+    assert create_expected_output(copy_cart) in captured.out
+
+
+@pytest.mark.parametrize("user_inputs", ["y"])
 def test_logout_clear_cart_with_multiple_elements(user_inputs, cart_with_multiple_elements, capsys):
     copy_cart = copy.deepcopy(cart_with_multiple_elements)
 

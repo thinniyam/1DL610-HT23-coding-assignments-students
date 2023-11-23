@@ -10,17 +10,21 @@ def copy_csv_file():
     print("\n----------------teardown----------------\n")
 
 def test_int_input():
-    assert display_csv_as_table(1)
+    with pytest.raises(TypeError):
+        display_csv_as_table(1)
 
 def test_float_input():
-    assert display_csv_as_table(0.5)
+    with pytest.raises(TypeError):
+        display_csv_as_table(0.5)
 
 def test_list_input(copy_csv_file):
-    assert display_csv_as_table(["copy_products.csv", "copy_products.csv"])
+    with pytest.raises(TypeError):
+        display_csv_as_table(["copy_products.csv", "copy_products.csv"])
 
 # Test a non-existing file
 def test_EC1():
-    assert display_csv_as_table("non_existing_file.csv")
+    with pytest.raises(FileNotFoundError):
+        display_csv_as_table("non_existing_file.csv")
 
 # Test an empty csv file
 def test_EC2(capsys):
@@ -30,7 +34,8 @@ def test_EC2(capsys):
 
 # Test an empty string as input
 def test_EC3():
-    assert display_csv_as_table("")
+    with pytest.raises(FileNotFoundError):
+        display_csv_as_table("")
 
 # Test a csv file with only 1 column
 def test_EC4(capsys):
@@ -68,7 +73,7 @@ def test_EC8(capsys):
     assert out[50:65] == "['Banana', '1']"
     assert out[66:88] == "['Orange', '1.5', '8']"
 
-def test_output(capsys, copy_csv_file):
+def test_EC9(capsys, copy_csv_file):
     display_csv_as_table("copy_products.csv")
     out,err=capsys.readouterr()
     assert out[0:29]=="['Product', 'Price', 'Units']"

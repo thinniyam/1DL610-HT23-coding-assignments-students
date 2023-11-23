@@ -13,23 +13,21 @@ def copy_csv_file():
     os.remove('copy_products.csv')
     print("\n----------------teardown----------------\n")
 
-class EdgeCase1(unittest.TestCase):
-    # Test a non-existing file
-    def test_EC1(self):
-        with self.assertRaises(FileNotFoundError):
-            display_filtered_table("non_existing_file.csv", "Apple")
+# Test a non-existing file
+def test_EC1():
+    with pytest.raises(FileNotFoundError):
+        display_filtered_table("non_existing_file.csv", "Apple")
 
 # Test an empty csv file
 def test_EC2(capsys):
-    display_filtered_table("test_display_filtered_table_files/test_empty.csv", "Apple")
+    display_filtered_table("test_files/test_empty.csv", "Apple")
     out, err = capsys.readouterr()
     assert out == ""
 
-class EdgeCase3(unittest.TestCase):
-    # Test an empty string as csv file input
-    def test_EC3(self):
-        with self.assertRaises(FileNotFoundError):
-            display_filtered_table("", "Apple")
+# Test an empty string as csv file input
+def test_EC3():
+    with pytest.raises(FileNotFoundError):
+        display_filtered_table("", "Apple")
 
 # Test an empty string as search input
 def test_EC4(capsys, copy_csv_file):
@@ -67,12 +65,10 @@ def test_EC9(capsys):
     out, err = capsys.readouterr()
     assert out == "['Product', 'Price', 'Units', 'Status']\n['Banana', '1']\n"
 
-class EdgeCase10(unittest.TestCase):
-
-    # Test a csv file not containing a 'Product' column
-    def test_EC10(self):
-        with self.assertRaises(ValueError):
-            display_filtered_table("test_files/test_no_product_column.csv", "Banana")
+# Test a csv file not containing a 'Product' column
+def test_EC10():
+    with pytest.raises(ValueError):
+        display_filtered_table("test_files/test_no_product_column.csv", "Banana")
 
 # Test a csv file with 'Product' as the second column
 def test_EC11(capsys):
@@ -92,17 +88,17 @@ def test_EC13(capsys, copy_csv_file):
     out, err = capsys.readouterr()
     assert out == "['Product', 'Price', 'Units']\n"
 
-def test_output1(capsys, copy_csv_file):
+def test_EC14a(capsys, copy_csv_file):
     display_filtered_table("copy_products.csv", "Apple")
     out,err=capsys.readouterr()
     assert out=="['Product', 'Price', 'Units']\n['Apple', '2', '10']\n"
 
-def test_output2(capsys, copy_csv_file):
+def test_EC14b(capsys, copy_csv_file):
     display_filtered_table("copy_products.csv", "Dish Soap")
     out,err=capsys.readouterr()
     assert out=="['Product', 'Price', 'Units']\n['Soap', '1', '12']\n['Dish Soap', '1.5', '12']\n"
 
-def test_output3(capsys, copy_csv_file):
+def test_EC14c(capsys, copy_csv_file):
     display_filtered_table("copy_products.csv", "Backpack")
     out,err=capsys.readouterr()
     assert out=="['Product', 'Price', 'Units']\n['Backpack', '25', '1']\n['Backpack', '15', '1']\n"

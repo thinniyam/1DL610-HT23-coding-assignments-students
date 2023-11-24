@@ -99,11 +99,11 @@ class LogoutTestCase(TestCase):
         cart = copy.deepcopy(self.cart)
         cart.add_item(self.products[0])
 
-        with mock.patch('builtins.input', side_effect=['n']):
+        with mock.patch('builtins.input', side_effect=['y']):
             logout_response = logout(cart)
 
-        self.assertFalse(logout_response)
-        self.assertEqual(len(cart.items), 1)
+        self.assertTrue(logout_response)
+        self.assertEqual(len(cart.items), 0)
 
     def test_logout_confirmation_with_wrong_input(self):
         cart = copy.deepcopy(self.cart)

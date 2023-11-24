@@ -24,23 +24,33 @@ def login():
 
         # register new user
         if user is None:
-            register_confirmation = input('User not found! Would you like to register? (Y/N): ')
-            if register_confirmation.upper() == 'Y':
-                while True:
-                    password = input('Enter your password: ')
-                    validation_errors = validate_password(password)
-                    if not validation_errors:
-                        save_user({
-                            'username': username,
-                            'password': password,
-                            'wallet': 0,
-                        })
-                        print('Your account was created successfully.')
-                        break
-                    else:
-                        for validation_error in validation_errors.values():
-                            print(validation_error)
+            return register({'username': username})
+
         return None
+
+
+def register(user):
+    register_confirmation = input('User not found! Would you like to register? (Y/N): ')
+    if register_confirmation.upper() == 'Y':
+        while True:
+            password = input('Enter your password: ')
+            validation_errors = validate_password(password)
+            if not validation_errors:
+                user.update({'password': password})
+                user.update({'wallet': 0})
+                save_user(user)
+
+                print('Your account was created successfully.')
+                print('Successfully logged in.')
+
+                return {
+                    'username': user.get('username'),
+                    'wallet': user.get('wallet'),
+                }
+            else:
+                for validation_error in validation_errors.values():
+                    print(validation_error)
+    return None
 
 
 def save_user(user):
@@ -60,12 +70,12 @@ def save_user(user):
         file.close()
 
 
-def check_username(data, username):
+def check_username(username, data):
     """
     Check if the user already exists.
 
-    :param data: the list of existing users
     :param username: the username of the new user
+    :param data: the list of existing users
     :return: boolean
     """
     return any(user.get('username') == username for user in data)
